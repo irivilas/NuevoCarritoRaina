@@ -2,7 +2,8 @@ const productos = [
     { nombre: 'Castillo numero 1', precio: 2500 },
     { nombre: 'Castillo numero 2', precio: 2800 },
     { nombre: 'Granja',precio: 2300 },
-    { nombre: 'Casita de muñecas', precio: 3500 },
+    { nombre: 'Casita de muñecas', precio: 3500 }
+    ,
 ];
 
 let carrito = [];
@@ -16,6 +17,12 @@ const totalPagarElement = document.getElementById('totalPagar');
 const finalizarCompraBtn = document.getElementById('finalizarCompra');
 
 const mensajeCarritoVacio = document.getElementById('mensajeCarritoVacio');
+
+
+const alertaCarrito = document.getElementById('alertaCarrito');
+const cantidadProductosSpan = document.getElementById('cantidadProductos');
+
+
 
 function actualizarCarrito() {
     carritoLista.innerHTML = '';
@@ -45,12 +52,17 @@ function actualizarCarrito() {
 
     localStorage.setItem('carrito', JSON.stringify(carrito));
 
+
+    cantidadProductosSpan.innerText = carrito.length;
     if (carrito.length > 0) {
-        mensajeCarritoVacio.style.display = 'block';
+        alertaCarrito.style.display = 'block';
+        finalizarCompraBtn.removeAttribute('disabled'); 
     } else {
-        mensajeCarritoVacio.style.display = 'none';
+        alertaCarrito.style.display = 'none';
+        finalizarCompraBtn.setAttribute('disabled', true);
     }
-}
+    }
+
 
 productos.forEach(function(producto) {
     const listItem = document.createElement('li');
@@ -58,17 +70,24 @@ productos.forEach(function(producto) {
 
     const addButton = document.createElement('button');
 
-    addButton.addEventListener('click', (e) =>{
-        e.preventDefault();
+
+
+    addButton.addEventListener('click', function() {
+        carrito.push(producto);
+        actualizarCarrito();
+    
+        // Agrega una alerta adicional para notificar al usuario
         Swal.fire({
             icon: 'success',
             title: 'Producto Agregado',
-            text: 'El producto se agrego correctamente',
-          })
+            text: 'El producto se agregó correctamente al carrito.',
+        });
     });
+    
+    
 
     addButton.className = 'btn btn-success float-right';
-    addButton.innerText = 'Comprar';
+    addButton.innerText = 'Agregar';
 
     listItem.innerText = `${producto.nombre} - Precio: $${producto.precio.toFixed(2)}`;
 
@@ -91,4 +110,9 @@ if (carritoGuardado) {
 finalizarCompraBtn.addEventListener('click', function() {
     carrito = [];
     actualizarCarrito();
+
+
+
+   
+
 });
