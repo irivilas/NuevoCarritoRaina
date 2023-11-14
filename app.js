@@ -93,10 +93,7 @@ productos.forEach(function(producto) {
 
     listItem.appendChild(addButton);
 
-    addButton.addEventListener('click', function() {
-        carrito.push(producto);
-        actualizarCarrito();
-    });
+
 
     listaProductos.appendChild(listItem);
 });
